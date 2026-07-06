@@ -27,6 +27,27 @@
     typst
     pandoc
   ];
+
+  programs.git = {
+    enable = true;
+    userName = "uneame";
+    userEmail = "camarade042@gmail.com";
+    extraConfig = {
+      init.defaultBranch = "main";
+      core.editor = "nvim";
+    };
+  };
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "github.com" = {
+        hostname = "github.com";
+        user = "git";
+        identityFile = "~/.ssh/id_ed25519";
+      };
+    };
+  };
   
 
   programs.fish = {  
@@ -68,7 +89,7 @@
       transfert_conf = ''
         set MY_SOURCES_DIR $HOME/.config/nix-on-droid
         set MY_DEST_DIR $HOME/storage/documents/NixConf
-        set MY_FILES "flake.nix" "nix-on-droid.nix" "home.nix"
+        set MY_FILES "flake.nix" "nix-on-droid.nix" "home.nix" "authorized_keys.pub" "ollama-key.env"
         
         if ! test -d $MY_DEST_DIR
           mkdir $MY_DEST_DIR
@@ -227,7 +248,7 @@
   programs.bat = {  
     enable = true;  
     config = {  
-      theme = "catppuccin-mocha";
+      #theme = "catppuccin-mocha";
       style = "numbers,changes,header";  
       paging = "never";  
     };  

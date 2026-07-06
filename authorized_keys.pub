@@ -1,0 +1,6 @@
+# Remplace ce contenu par ta vraie clé publique SSH.
+# Génère-la sur ton PC/laptop avec :
+#   ssh-keygen -t ed25519 -f id_ed25519
+# Puis colle ici le contenu du fichier id_ed25519.pub (une seule ligne, sans les commentaires ci-dessus).
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKBQt/ENjsqekbQX0zH6uAUHxLWbIR1gN5D5XyxIjLqR camarade042@gmail.com
