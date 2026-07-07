@@ -81,7 +81,7 @@
     EDITOR = "nvim";
     SHELL = "fish";
     BROWSER = "termux-open-url";
-    OLLAMA_API_KEY = builtins.readFile ./ollama-key.env;
+    # OLLAMA_API_KEY = builtins.readFile ./ollama-key.env;
   };
 
   # Shell de connexion par défaut sur nix-on-droid

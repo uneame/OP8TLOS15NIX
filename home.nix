@@ -119,6 +119,9 @@
     interactiveShellInit = ''  
       set -g fish_greeting
       set -g fish_key_bindings fish_vi_key_bindings
+      if test -f ~/.config/nix-on-droid/ollama-key.env
+        set -gx OLLAMA_API_KEY (cat ~/.config/nix-on-droid/ollama-key.env)
+      end
     '';
 
   };
