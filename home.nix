@@ -57,7 +57,12 @@
       ll = "ls -la --color=auto";  
       cls = "clear";
 
-      cat = "bat --style=plain";
+      yt-audio = "yt-dlp --format 249 --console-title";
+      yt-video = "yt-dlp --format 18 --console-title";
+      yt-list = "yt-dlp -F";
+
+      cat = "bat --color=auto --number";
+      less = "less --use-color";
       grep = "rg";
 
       nix-shell = "nix-shell --command fish";
@@ -67,6 +72,11 @@
       cleanup = "nix-collect-garbage -d";
     };  
 
+    # fish_vi_key_bindings = {
+    #   enable = true;
+    #   no-erase = false;
+    # };
+    
     #abbreviations = {  
     #  g = "git";  
     #  v = "nvim";  
@@ -96,7 +106,7 @@
         end
 
         for i in $MY_FILES
-          cp $MY_SOURCES_DIR/$i $MY_DEST_DIR/$i
+          cp -f $MY_SOURCES_DIR/$i $MY_DEST_DIR/$i
         end
       '';
     };
@@ -108,6 +118,7 @@
 
     interactiveShellInit = ''  
       set -g fish_greeting
+      set -g fish_key_bindings fish_vi_key_bindings
     '';
 
   };
@@ -248,7 +259,7 @@
   programs.bat = {  
     enable = true;  
     config = {  
-      #theme = "catppuccin-mocha";
+      theme = "Monokai Extended Origin";
       style = "numbers,changes,header";  
       paging = "never";  
     };  
