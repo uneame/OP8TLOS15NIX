@@ -38,34 +38,40 @@
     '')
   ];
 
-  # --- Configuration SSH (sshd) ---
-  # 1. Place ta clé publique dans le même dossier que ce fichier,
-  #    sous le nom "authorized_keys.pub" (ou change le chemin ci-dessous).
-  # 2. Après "nix-on-droid switch", lance "sshd-start" pour démarrer le serveur.
-  build.activation.sshd =
-    let
-      sshdTmpDirectory = "${config.user.home}/sshd-tmp";
-      sshdDirectory = "${config.user.home}/sshd";
-      pathToPubKey = ./authorized_keys.pub;
-    in
-    ''
-      $DRY_RUN_CMD mkdir $VERBOSE_ARG --parents "${config.user.home}/.ssh"
-      $DRY_RUN_CMD cat ${pathToPubKey} > "${config.user.home}/.ssh/authorized_keys"
+build.activation.sshd =
+  let
+    sshdTmpDirectory = "${config.user.home}/sshd-tmp";
+    sshdDirectory = "${config.user.home}/sshd";
+    pathToPubKey = ./authorized_keys.pub;
+  in
+  ''
+    $DRY_RUN_CMD mkdir $VERBOSE_ARG --parents "${config.user.home}/.ssh"
+    $DRY_RUN_CMD cat ${pathToPubKey} > "${config.user.home}/.ssh/authorized_keys"
 
-      if [[ ! -d "${sshdDirectory}" ]]; then
-        $DRY_RUN_CMD rm $VERBOSE_ARG --recursive --force "${sshdTmpDirectory}"
-        $DRY_RUN_CMD mkdir $VERBOSE_ARG --parents "${sshdTmpDirectory}"
+    # <-- ICI, la nouvelle ligne :
+    $DRY_RUN_CMD bash -c "echo 'PATH=$PATH' > '${config.user.home}/.ssh/environment'"
 
-        $VERBOSE_ECHO "Generating host keys..."
-        $DRY_RUN_CMD ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f "${sshdTmpDirectory}/ssh_host_rsa_key" -N ""
+    # Les clés hôte ne sont générées qu'une fois
+    if [[ ! -d "${sshdDirectory}" ]]; then
+      $DRY_RUN_CMD rm $VERBOSE_ARG --recursive --force "${sshdTmpDirectory}"
+      $DRY_RUN_CMD mkdir $VERBOSE_ARG --parents "${sshdTmpDirectory}"
 
-        $VERBOSE_ECHO "Writing sshd_config..."
-        $DRY_RUN_CMD echo -e "HostKey ${sshdDirectory}/ssh_host_rsa_key\nPort 8022\n" > "${sshdTmpDirectory}/sshd_config"
+      $VERBOSE_ECHO "Generating host keys..."
+      $DRY_RUN_CMD ${pkgs.openssh}/bin/ssh-keygen -t rsa -b 4096 -f "${sshdTmpDirectory}/ssh_host_rsa_key" -N ""
 
-        $DRY_RUN_CMD mv $VERBOSE_ARG "${sshdTmpDirectory}" "${sshdDirectory}"
-      fi
-    '';
+      $DRY_RUN_CMD mv $VERBOSE_ARG "${sshdTmpDirectory}" "${sshdDirectory}"
+    fi
 
+    $VERBOSE_ECHO "Writing sshd_config..."
+    $DRY_RUN_CMD bash -c "cat > '${sshdDirectory}/sshd_config' <<SSHDEOF
+HostKey ${sshdDirectory}/ssh_host_rsa_key
+Port 8022
+
+SetEnv PATH=$PATH
+
+PermitUserEnvironment yes
+SSHDEOF"
+  '';
   android-integration = {
     am.enable = true;
     termux-open.enable = true;

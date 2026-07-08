@@ -20,8 +20,13 @@
 
   home.packages = with pkgs; [
     neofetch
-    git
-    #ripgrep
+    ripgrep        # remplaçant grep
+    fd             # remplaçant find  
+    eza            # remplaçant ls (ou lsd)  
+    duf            # remplaçant df  
+    dust           # remplaçant du  
+    # git-delta      # remplaçant diff (intégration Git)  
+    tldr           # remplaçant man (pages simplifiées)  
     jq
     nixfmt
     typst
@@ -52,14 +57,27 @@
 
   programs.fish = {  
     enable = true;  
+    shellAbbrs = {
+      g = "git";
+      v = "nvim";
+      h = "helix";
+      
+      gst = "git status";
+      gco = "git checkout";
+      gb = "git branch";
+      ga = "git add";
+      gc = "git commit";
+      gd = "git diff";
+    };
+    
     shellAliases = {  
       ls = "command ls --color=auto";
       ll = "ls -la --color=auto";  
       cls = "clear";
 
-      yt-audio = "yt-dlp --format 249 --console-title";
-      yt-video = "yt-dlp --format 18 --console-title";
-      yt-list = "yt-dlp -F";
+      ytd-audio = "yt-dlp --format 249 --console-title";
+      ytd-video = "yt-dlp --format 18 --console-title";
+      ytd-list = "yt-dlp -F";
 
       cat = "bat --color=auto --number";
       less = "less --use-color";
