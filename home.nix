@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  home.stateVersion = "26.11";
+  home.stateVersion = "24.05";
 
   home.homeDirectory = "/data/data/com.termux.nix/files/home";
 
