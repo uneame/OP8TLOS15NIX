@@ -26,7 +26,7 @@
     uv
     ripgrep
     ffmpeg
-
+    git
     ollama
     yt-dlp
     zoxide
