@@ -29,7 +29,7 @@
 
     ollama
     yt-dlp
-
+    zoxide
     openssh
     (writeScriptBin "sshd-start" ''
       #!${runtimeShell}
